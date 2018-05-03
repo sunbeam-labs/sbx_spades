@@ -45,7 +45,7 @@ rule run_spades:
     threads: 
       Cfg['sbx_spades']['threads']
     params: 
-       outdir = str(MAPPING_FP/'{genome}'/'{sample}_spades')
+       outdir = str(MAPPING_FP/'{genome}'/'spades'/'{sample}')
     shell:
        """
        spades.py -1 {input.r1} -2 {input.r2} -o {params.outdir} -t {threads} -m 100 && \
