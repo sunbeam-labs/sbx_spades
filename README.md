@@ -18,12 +18,19 @@ Sometimes we want to collecte all the aligned reads from the [**mapping**](https
   cat sunbeam/extensions/sbx_spades/config.yml >> sunbeam_config.yml
   ```
  
- 3. Run time
+ 3. Install the requirements:
+ 
+  ```bash
+  conda install --file sunbeam/extensions/sbx_spades/requirements.txt
+  ```
+  
+ 4. Run time
 
   ```bash
   snakemake --configfile sunbeam_config.yml all_spades
   ```
- 4. What's next?
+ 
+ 5. What's next?
  
   Want to know whether your freshly assembled genomes are complete? Use your favoriate genome assessment tools, e.g. [checkM](http://ecogenomics.github.io/CheckM/), or simply the 139 single-copy genes for Bacteria species using [sbx_anvio](https://github.com/sunbeam-labs/sbx_anvio) 😳
 
