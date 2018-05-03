@@ -1,0 +1,55 @@
+# -*- mode: Snakemake -*-
+#
+# Rules for de novo assembly using aligned reads
+
+
+from sunbeamlib import samtools
+
+#### 20180410: de novo assembly only mapped reads
+rule all_spades:
+    input:
+        expand(str(MAPPING_FP/'{genome}'/'spades'/'{sample}'/'done.assembly'), 
+               genome=GenomeSegments.keys(), sample=Samples.keys())
+
+rule sort_bam_by_name:
+    input:
+        str(MAPPING_FP/'intermediates'/'{genome}'/'{sample}.sam')
+    output:
+        str(MAPPING_FP/'{genome}'/'sortbyname'/'{sample}.bam')
+    threads: 
+        Cfg['sbx_spades']['threads']
+    shell:
+        """
+        samtools view -@ {threads} -b {Cfg[mapping][samtools_opts]} {input} | \
+        samtools sort -n -@ {threads} > {output}
+        """
+
+rule bam2fastq:
+    input: 
+        str(MAPPING_FP/'{genome}'/'sortbyname'/'{sample}.bam')
+    output: 
+        r1 = str(MAPPING_FP/'{genome}'/'reads'/'{sample}_1.fastq'),
+        r2 = str(MAPPING_FP/'{genome}'/'reads'/'{sample}_2.fastq')
+    threads: 
+        Cfg['sbx_spades']['threads']
+    shell:
+        """
+        bedtools bamtofastq -i {input} -fq {output.r1} -fq2 {output.r2}
+        """
+
+rule run_spades:
+    input:
+       r1 = str(MAPPING_FP/'{genome}'/'reads'/'{sample}_1.fastq'),
+       r2 = str(MAPPING_FP/'{genome}'/'reads'/'{sample}_2.fastq')
+    output:
+       str(MAPPING_FP/'{genome}'/'spades'/'{sample}'/'done')
+    threads: 
+      Cfg['sbx_spades']['threads']
+    params: 
+       outdir = str(MAPPING_FP/'{genome}'/'{sample}_spades')
+    shell:
+       """
+       spades.py -1 {input.r1} -2 {input.r2} -o {params.outdir} -t {threads} -m 100 && \
+       touch {output}
+       """
+
