@@ -2,13 +2,12 @@
 #
 # Rules for de novo assembly using aligned reads
 
-
 from sunbeamlib import samtools
 
 #### 20180410: de novo assembly only mapped reads
 rule all_spades:
     input:
-        expand(str(MAPPING_FP/'{genome}'/'spades'/'{sample}'/'done.assembly'), 
+        expand(str(MAPPING_FP/'{genome}'/'spades'/'{sample}'/'done'), 
                genome=GenomeSegments.keys(), sample=Samples.keys())
 
 rule sort_bam_by_name:
