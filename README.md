@@ -1,4 +1,4 @@
-# sbx_spades
+# sbx_spades ✔️
 
 Sometimes we want to collecte all the aligned reads from the [**mapping**](https://github.com/sunbeam-labs/sunbeam/blob/dev/rules/mapping/mapping.rules) bam files and de novo assemble the reads using spades or velvet. 
 
