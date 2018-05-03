@@ -21,7 +21,7 @@ Sometimes we want to collecte all the aligned reads from the [**mapping**](https
  3. Install the requirements:
  
   ```bash
-  conda install --file sunbeam/extensions/sbx_spades/requirements.txt
+  conda install --file extensions/sbx_spades/requirements.txt
   ```
   
  4. Run time
