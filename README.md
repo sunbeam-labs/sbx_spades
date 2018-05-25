@@ -27,7 +27,7 @@ Sometimes we want to collecte all the aligned reads from the [**mapping**](https
  4. Run time
 
   ```bash
-  snakemake run -- --configfile sunbeam_config.yml all_spades
+  sunbeam run -- --configfile sunbeam_config.yml all_spades
   ```
  
  5. What's next?
