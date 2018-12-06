@@ -36,7 +36,7 @@ rule bam2fastq:
         bedtools bamtofastq -i {input} -fq {output.r1} -fq2 {output.r2}
         """
 
-rule run_spades:
+rule run_spades_paired:
     input:
        r1 = str(MAPPING_FP/'{genome}'/'reads'/'{sample}_1.fastq'),
        r2 = str(MAPPING_FP/'{genome}'/'reads'/'{sample}_2.fastq')
@@ -52,3 +52,18 @@ rule run_spades:
        touch {output}
        """
 
+#### The following rule is used with sbx_krakenuniq
+rule run_spades_interlaced:
+    input:
+       str(CLASSIFY_FP/'krakenhll'/'42789'/'{sample}.fastq'),
+    output:
+       str(CLASSIFY_FP/'krakenhll'/'42789'/'spades'/'{sample}'/'done')
+    threads: 
+      Cfg['sbx_spades']['threads']
+    params: 
+       outdir = str(CLASSIFY_FP/'krakenhll'/'42789'/'spades'/'{sample}')
+    shell:
+       """
+       spades.py --12 {input} -o {params.outdir} -t {threads} -m 100 && \
+       touch {output}
+       """
