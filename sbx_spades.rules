@@ -17,6 +17,8 @@ rule sort_bam_by_name:
         str(MAPPING_FP/'{genome}'/'sortbyname'/'{sample}.bam')
     threads: 
         Cfg['sbx_spades']['threads']
+    conda:
+        "sbx_spades_env.yml"
     shell:
         """
         samtools view -@ {threads} -b {Cfg[mapping][samtools_opts]} {input} | \
@@ -31,6 +33,8 @@ rule bam2fastq:
         r2 = str(MAPPING_FP/'{genome}'/'reads'/'{sample}_2.fastq')
     threads: 
         Cfg['sbx_spades']['threads']
+    conda:
+        "sbx_spades_env.yml"
     shell:
         """
         bedtools bamtofastq -i {input} -fq {output.r1} -fq2 {output.r2}
@@ -46,6 +50,8 @@ rule run_spades_paired:
       Cfg['sbx_spades']['threads']
     params: 
        outdir = str(MAPPING_FP/'{genome}'/'spades'/'{sample}')
+    conda:
+        "sbx_spades_env.yml"
     shell:
        """
        spades.py -1 {input.r1} -2 {input.r2} -o {params.outdir} -t {threads} -m 100 && \
@@ -62,6 +68,8 @@ rule run_spades_interlaced:
       Cfg['sbx_spades']['threads']
     params: 
        outdir = str(CLASSIFY_FP/'krakenhll'/'42789'/'spades'/'{sample}')
+    conda:
+        "sbx_spades_env.yml"
     shell:
        """
        spades.py --12 {input} -o {params.outdir} -t {threads} -m 100 && \
